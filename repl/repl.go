@@ -7,6 +7,7 @@ import (
 
 	"github.com/stray4x/interpreter/evaluator"
 	"github.com/stray4x/interpreter/lexer"
+	"github.com/stray4x/interpreter/object"
 	"github.com/stray4x/interpreter/parser"
 )
 
@@ -14,6 +15,7 @@ const PROMPT = ">> "
 
 func Start(in io.Reader, out io.Writer) {
 	scanner := bufio.NewScanner(in)
+	env := object.NewEnvironment()
 
 	for {
 		fmt.Printf(PROMPT)
@@ -33,7 +35,7 @@ func Start(in io.Reader, out io.Writer) {
 			continue
 		}
 
-		evaluaded := evaluator.Eval(program)
+		evaluaded := evaluator.Eval(program, env)
 		if evaluaded != nil {
 			io.WriteString(out, evaluaded.Inspect())
 			io.WriteString(out, "\n")
