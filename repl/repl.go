@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 
+	"github.com/stray4x/interpreter/evaluator"
 	"github.com/stray4x/interpreter/lexer"
 	"github.com/stray4x/interpreter/parser"
 )
@@ -32,8 +33,11 @@ func Start(in io.Reader, out io.Writer) {
 			continue
 		}
 
-		io.WriteString(out, program.String())
-		io.WriteString(out, "\n")
+		evaluaded := evaluator.Eval(program)
+		if evaluaded != nil {
+			io.WriteString(out, evaluaded.Inspect())
+			io.WriteString(out, "\n")
+		}
 	}
 }
 
